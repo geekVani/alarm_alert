@@ -1,0 +1,125 @@
+<!DOCTYPE html>  
+ <html lang="en">  
+ <head>  
+   <meta charset="UTF-8">  
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+   <title>ALARM APP!</title>  
+   <link rel="stylesheet" href="style.css">  
+   <style>
+     @font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/montserrat/v24/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Hw0aXpsog.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/montserrat/v24/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Hw9aXpsog.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/montserrat/v24/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Hw2aXpsog.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/montserrat/v24/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Hw3aXpsog.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/montserrat/v24/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtZ6Hw5aXo.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+   </style>
+   <script src="https://kit.fontawesome.com/6f260fee7a.js" crossorigin="anonymous"></script>  
+ </head>  
+ <body>  
+   <nav>  
+     <h1>ALARM APP  
+       <i class="far fa-clock"></i>
+     </h1>  
+   </nav>  
+   <div class="container">  
+     <p>Enter the time</p>  
+     <div class="inputs">  
+       <input type="number" id="txt" placeholder="" class="time" autocomplete="off">  
+       <span>:</span>  
+       <input type="number" id="txt2" placeholder="" class="time" autocomplete="off">  
+     </div>  
+     <div class="btns">  
+       <button id="btn" class="butt" style="background-color: cyan; border-radius: 10%; font-weight: bold; width: 10vw; color: black;">SET</button>  
+       <button id="btn2" class="butt" style="background-color: tomato; border-radius: 15%; text-align: center; align-content: center; font-weight: bold; width: 5vw; color: rgb(248, 242, 242);">STOP</button>  
+     </div>  
+     <div class="info">  
+       <p id="para"></p>  
+     </div>  
+   </div>  
+   <script>
+     let para = document.getElementById('para');  
+ let text = document.getElementById('txt');  
+ let text2 = document.getElementById('txt2');  
+ let btn = document.getElementById('btn');  
+ let btn2 = document.getElementById('btn2');  
+ window.addEventListener('load', () => {  
+  text.placeholder = new Date().getHours();  
+  text2.placeholder = new Date().getMinutes();  
+ });  
+ btn.addEventListener('click', alarm);  
+ let x;  
+ function alarm() {  
+  if (text.value && text2.value) {  
+   x = setInterval(() => {  
+    setAlarm();  
+   }, 1000);  
+  } else {  
+   alert('ENTER THE TIME!');  
+  }  
+ }  
+ function setAlarm() {  
+  let d = new Date().toLocaleDateString();  
+  let then = new Date(`${d} ${text.value}:${text2.value}`).getTime();  
+  // text.value = text.value % 12 || 12;  
+  let now = new Date().getTime();  
+  let distance = then - now;  
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));  
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));  
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);  
+  para.innerHTML = `ALARM IN - ${hours}:${minutes}:${seconds}`;  
+  if (distance < 0) {  
+   clearInterval(x);  
+   para.innerHTML = `WAKE-UP TIME!`;  
+   let audio = new Audio('alarm sound.mp3');  
+   audio.play();  
+   btn2.style.visibility = 'visible';  
+   btn2.addEventListener('click', () => {  
+    para.innerHTML = ``;  
+    audio.pause();  
+    btn2.style.visibility = 'hidden';  
+    text.value = '';  
+    text2.value = '';  
+   });  
+  }  
+ }  
+   </script>  
+ </body>  
+ </html>  
